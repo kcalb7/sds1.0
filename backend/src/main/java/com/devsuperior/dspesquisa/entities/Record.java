@@ -29,6 +29,13 @@ public class Record implements Serializable {
 
 	public Record() {
 	}
+	
+	public Record(String name, Integer age, Instant moment, Game game) {
+		this.name = name;
+		this.age = age;
+		this.moment = moment;
+		this.game = game;
+	}
 
 	public Record(long id, String name, Integer age, Instant moment, Game game) {
 		super();
