@@ -26,8 +26,6 @@ public class RecordService {
 
 	@Transactional
 	public RecordDTO save(RecordInsertDTO dto) {
-		System.out.print("---=====>>>>> ");
-		System.out.println(dto);
 		Game game = gameRepository.getOne(dto.getGameId());
 		Record entity = new Record(dto.getName(), dto.getAge(), Instant.now(), game);
 		entity = repository.save(entity);
