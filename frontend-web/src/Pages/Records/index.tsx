@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+import Filters from "../../components/Filters";
+
+import Pagination from "./Pagination";
 import { RecordsResponse } from "./types";
 import { formatDate } from "./helpers";
 
 import "./styles.css";
-import Pagination from "./Pagination";
-import { Link } from "react-router-dom";
 
 const BASE_URL = "https://sds1-douglas.herokuapp.com";
 
@@ -25,11 +26,7 @@ const Records = () => {
 
 	return (
 		<div className="page-container">
-			<div className="filters-container records-actions">
-				<Link to="/charts">
-					<button className="action-filters">VER GRÁFICOS</button>
-				</Link>
-			</div>
+			<Filters link="/charts" linkText="VER GRÁFICOS" />
 			<table className="records-table" cellPadding="0" cellSpacing="0">
 				<thead>
 					<tr>
