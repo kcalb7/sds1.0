@@ -1,9 +1,16 @@
 import React from "react";
-import "./App.css";
 import Header from "./components/Header";
+import Home from "./Pages/Home";
+
+import "./App.css";
 
 function App() {
-	return <Header></Header>;
+	return (
+		<div>
+			<Header></Header>
+			<Home></Home>
+		</div>
+	);
 }
 
 export default App;
