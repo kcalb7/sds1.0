@@ -1,15 +1,27 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 
-const Header = () => (
-	<View style={styles.header}>
-		<Image source={require("../../assets/logo.png")} style={styles.tinyLogo} />
-		<Text style={styles.textLogo1}>Big Game</Text>
-		<Text style={styles.textLogo2}> Survey</Text>
-	</View>
-);
+const Header = () => {
+	const navigation = useNavigation();
+	const handleOnPress = () => {
+		navigation.navigate("Home");
+	};
 
-export default Header;
+	return (
+		<TouchableWithoutFeedback onPress={handleOnPress}>
+			<View style={styles.header}>
+				<Image
+					source={require("../../assets/logo.png")}
+					style={styles.tinyLogo}
+				/>
+				<Text style={styles.textLogo1}>Big Game</Text>
+				<Text style={styles.textLogo2}> Survey</Text>
+			</View>
+		</TouchableWithoutFeedback>
+	);
+};
 
 const styles = StyleSheet.create({
 	header: {
@@ -38,3 +50,5 @@ const styles = StyleSheet.create({
 		height: 25,
 	},
 });
+
+export default Header;
