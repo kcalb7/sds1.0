@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createRef } from "react";
 import { StyleSheet, Text, TextInput, View, Alert } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import { FontAwesome5 as Icon } from "@expo/vector-icons";
 import axios from "axios";
 import { RectButton } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 
 import Header from "../../components/Header";
 import PlatformCard from "../../components/PlatformCard";
@@ -39,17 +40,57 @@ const CreateRecord = () => {
 		setFilteredGames(games.filter((g) => g.platform === selectedPlatform));
 	};
 
-	
+	const inputName = createRef<TextInput>();
+	const inputAge = createRef<TextInput>();
+
+	const navigator = useNavigation();
 	const handleSubmit = () => {
-		const payload = { name, age, gameId };
-		axios
-			.post(`${BASE_URL}/records`, payload)
-			.then(() => Alert.alert('Sucesso!','Dados registrados'))
-			.catch((err) => Alert.alert('Erro ao submeter dados:',err));
-		setName("");
-		setAge("");
-		setGameId("");
-		setPlatform(undefined);
+		let input: React.RefObject<TextInput> | null = null,
+			title = "Campo(s) vazio(s)",
+			subtite = "Por favor, preencha todos os campos";
+
+		if (name && age && gameId) {
+			const payload = { name, age, gameId };
+			axios
+				.post(`${BASE_URL}/records`, payload)
+				.then(() => Alert.alert("Sucesso!", "Dados registrados"))
+				.catch((err) => Alert.alert("Erro ao submeter dados:", err));
+			setName("");
+			setAge("");
+			setPlatform(undefined);
+			setGameId("");
+			navigator.navigate("Home");
+		} else if (!name) input = inputName;
+		else if (!age) input = inputAge;
+		else if (!platform) {
+			title = "Plataforma não selecionada";
+			subtite = "Favor selecionar uma plataforma, e em seguida o game";
+		} else if (!gameId) {
+			title = "Game não selecionado";
+			subtite = "Favor selecionar um game";
+		}
+
+		Alert.alert(title, subtite, [
+			{
+				text: "Back Home",
+				onPress: () => {
+					console.log("Ask me later pressed");
+					navigator.navigate("Home");
+				},
+			},
+			{
+				text: "Cancel",
+				onPress: () => console.log("Cancel Pressed"),
+				style: "cancel",
+			},
+			{
+				text: "OK",
+				onPress: () => {
+					if (input) input.current?.focus();
+					console.log("OK Pressed");
+				},
+			},
+		]);
 	};
 
 	useEffect(() => {
@@ -71,8 +112,11 @@ const CreateRecord = () => {
 					placeholderTextColor="#9e9e9e"
 					onChangeText={(t) => setName(t)}
 					value={name}
+					autoFocus={true}
+					ref={inputName}
 				/>
 				<TextInput
+					ref={inputAge}
 					style={styles.inputText}
 					placeholder="Idade"
 					placeholderTextColor="#9e9e9e"
